@@ -1097,9 +1097,12 @@ reduce it further).
                ...)
              ([metafunction-contract (code:line) 
                                      (code:line id : @#,ttpattern-sequence ... -> range
-                                                maybe-pre-condition)]
+                                                maybe-pre-condition
+                                                maybe-cache-poison)]
               [maybe-pre-condition (code:line #:pre @#,tttterm)
                                    (code:line)]
+              [maybe-cache-poison (code:line #:cache-poison)
+                                  (code:line)]
               [range @#,ttpattern
                      (code:line @#,ttpattern or range)
                      (code:line @#,ttpattern ∨ range)
@@ -1156,6 +1159,15 @@ for the same inputs, and their results are cached, unless
 @racket[caching-enabled?] is set to @racket[#f]. Accordingly, if a
 metafunction is called with the same inputs twice, then its body is
 only evaluated a single time.
+
+Caching can be canceled for individual metafunctions by including the
+@racket[#:cache-poison] keyword. If another metafunction calls this
+cache-poisoning metafunction, directly or indirectly, that other
+metafunction's result will not be cached. For example, if one metafunction
+gets a fresh name via @racket[gensym], its result should not be cached, nor
+should any result which depends on that fresh name. Adding
+@racket[#:cache-poison] will prevent those results from being cached
+without having to disable caching globally.
 
 As an example, these metafunctions finds the free variables in
 an expression in the lc-lang above:

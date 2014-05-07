@@ -7,7 +7,8 @@
          racket/match
          pkg/lib
          "test-util.rkt"
-         "bitmap-test-util.rkt")
+         "bitmap-test-util.rkt"
+         "cache-poisoning-test.rkt")
 
 (define test-examples? #f)
 
